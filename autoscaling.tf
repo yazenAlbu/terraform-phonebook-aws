@@ -32,11 +32,11 @@ resource "aws_launch_template" "phonebook" {
 }
 
 resource "aws_autoscaling_group" "phonebook" {
-  name                = "${var.project_name}-asg"
-  min_size            = var.min_size
-  max_size            = var.max_size
-  desired_capacity    = var.desired_capacity
-  health_check_type   = "ELB"
+  name                      = "${var.project_name}-asg"
+  min_size                  = var.min_size
+  max_size                  = var.max_size
+  desired_capacity          = var.desired_capacity
+  health_check_type         = "ELB"
   health_check_grace_period = 300
 
   vpc_zone_identifier = data.aws_subnets.default.ids

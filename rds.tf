@@ -23,12 +23,12 @@ resource "aws_db_instance" "phonebook" {
   db_subnet_group_name   = aws_db_subnet_group.phonebook.name
   vpc_security_group_ids = [aws_security_group.db.id]
 
-  publicly_accessible    = false
-  multi_az               = false
+  publicly_accessible     = false
+  multi_az                = false
   backup_retention_period = 0
-  skip_final_snapshot    = true
-  deletion_protection    = false
-  apply_immediately      = true
+  skip_final_snapshot     = true
+  deletion_protection     = false
+  apply_immediately       = true
 
   tags = {
     Name = "${var.project_name}-db"
