@@ -6,7 +6,7 @@ min_size         = 1
 max_size         = 3
 
 db_name           = "phonebook_db"
-db_username       = "phonebook_user"
+db_username       = "phonebookadmin"
 db_instance_class = "db.t3.micro"
 
 # Copy this file to terraform.tfvars and replace this example password.
