@@ -1,0 +1,38 @@
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Environment variables and secrets
+.env
+.env.local
+
+# Test and cache files
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+
+# VS Code local settings
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+terraform.tfvars
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
