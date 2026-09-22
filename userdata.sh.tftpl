@@ -1,0 +1,55 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y git python3 python3-pip
+
+rm -rf /opt/terraform-phonebook-aws
+git clone ${repo_url} /opt/terraform-phonebook-aws
+
+python3 -m venv /opt/phonebook-venv
+/opt/phonebook-venv/bin/pip install --upgrade pip
+/opt/phonebook-venv/bin/pip install -r /opt/terraform-phonebook-aws/requirements.txt
+
+cat > /etc/phonebook.env <<'EOF'
+DB_HOST="${db_host}"
+DB_PORT="${db_port}"
+DB_USER="${db_user}"
+DB_PASSWORD="${db_password}"
+DB_NAME="${db_name}"
+DEVELOPER_NAME="${developer_name}"
+APP_PORT="${app_port}"
+FLASK_DEBUG="false"
+EOF
+
+echo "APP_SECRET_KEY=$(/usr/bin/python3 -c 'import secrets; print(secrets.token_hex(32))')" >> /etc/phonebook.env
+chmod 600 /etc/phonebook.env
+
+set -a
+source /etc/phonebook.env
+set +a
+
+/opt/phonebook-venv/bin/python /opt/terraform-phonebook-aws/init_db.py
+
+chown -R ec2-user:ec2-user /opt/terraform-phonebook-aws
+
+cat > /etc/systemd/system/phonebook.service <<EOF
+[Unit]
+Description=Yazen Terraform Phonebook
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/opt/terraform-phonebook-aws
+EnvironmentFile=/etc/phonebook.env
+ExecStart=/opt/phonebook-venv/bin/gunicorn --workers 2 --bind 0.0.0.0:${app_port} app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now phonebook.service
