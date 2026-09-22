@@ -49,7 +49,7 @@ variable "db_name" {
 variable "db_username" {
   description = "MySQL master username."
   type        = string
-  default     = "phonebook_user"
+  default     = "phonebookadmin"
 }
 
 variable "db_password" {
