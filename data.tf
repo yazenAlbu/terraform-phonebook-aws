@@ -7,6 +7,13 @@ data "aws_subnets" "default" {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
+
+  # An Application Load Balancer can use only one subnet per Availability Zone.
+  # Restricting this query to default subnets guarantees one default subnet per AZ.
+  filter {
+    name   = "default-for-az"
+    values = ["true"]
+  }
 }
 
 data "aws_ami" "al2023" {
