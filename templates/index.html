@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Yazen Albu Phonebook</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2933;
+    }
+
+    .container {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      display: inline-block;
+      padding: 12px 16px;
+      border: 2px solid #1f2933;
+      border-radius: 8px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .navigation {
+      margin-bottom: 25px;
+    }
+
+    .navigation a {
+      display: inline-block;
+      padding: 10px 14px;
+      border: 1px solid #246bfd;
+      border-radius: 6px;
+      color: #246bfd;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navigation a:hover {
+      background: #eef4ff;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0 14px;
+      border: 1px solid #cbd2d9;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #246bfd;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .message-success {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #e6f7ec;
+      color: #176b36;
+    }
+
+    .message-error {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #ffe8e8;
+      color: #b42318;
+    }
+
+    .message-empty {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #fff5cc;
+      color: #7a5901;
+    }
+
+    .result-list {
+      padding: 0;
+      list-style: none;
+    }
+
+    .result-item {
+      margin: 12px 0;
+      padding: 16px;
+      border: 1px solid #d9e2ec;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .result-name {
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .action-link {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .edit-link {
+      border: 1px solid #246bfd;
+      color: #246bfd;
+    }
+
+    .edit-link:hover {
+      background: #eef4ff;
+    }
+
+    .delete-link {
+      border: 1px solid #b42318;
+      color: #b42318;
+    }
+
+    .delete-link:hover {
+      background: #ffe8e8;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #52606d;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="brand">
+      <span class="brand-mark">YA</span>
+
+      <h1>Phonebook Application</h1>
+
+      <p>
+        Developed by {{ developer_name }}
+      </p>
+    </header>
+
+    <nav class="navigation">
+      <a href="{{ url_for('add_contact') }}">
+        + Add a new contact
+      </a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <p class="message-success">
+            <strong>{{ message }}</strong>
+          </p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <section>
+      <h2>Search the phonebook</h2>
+
+      <form
+        action="{{ url_for('home') }}"
+        method="post"
+      >
+        <label for="name">
+          Name
+        </label>
+
+        <input
+          type="text"
+          id="name"
+          name="username"
+          placeholder="Enter all or part of a name"
+        >
+
+        <button type="submit">
+          Search
+        </button>
+      </form>
+
+      {% if error_message %}
+        <p class="message-error">
+          <strong>{{ error_message }}</strong>
+        </p>
+      {% endif %}
+
+      {% if show_result %}
+        <h2>
+          Results for “{{ searched_keyword }}”
+        </h2>
+
+        {% if results %}
+          <ul class="result-list">
+
+            {% for person in results %}
+              <li class="result-item">
+
+                <div class="result-name">
+                  <strong>{{ person["name"] }}</strong>
+                </div>
+
+                <div>
+                  Phone number: {{ person["number"] }}
+                </div>
+
+                <div class="result-actions">
+                  <a
+                    class="action-link edit-link"
+                    href="{{ url_for(
+                      'update_contact',
+                      person_id=person['id']
+                    ) }}"
+                  >
+                    Edit contact
+                  </a>
+
+                  <a
+                    class="action-link delete-link"
+                    href="{{ url_for(
+                      'delete_contact',
+                      person_id=person['id']
+                    ) }}"
+                  >
+                    Delete contact
+                  </a>
+                </div>
+
+              </li>
+            {% endfor %}
+
+          </ul>
+        {% else %}
+          <p class="message-empty">
+            No matching person was found.
+          </p>
+        {% endif %}
+      {% endif %}
+    </section>
+
+    <footer>
+      Python Flask and MySQL phonebook project by
+      {{ developer_name }}
+    </footer>
+
+  </main>
+</body>
+
+</html>
