@@ -58,8 +58,8 @@ variable "db_password" {
   sensitive   = true
 
   validation {
-    condition     = length(var.db_password) >= 12 && can(regex("^[A-Za-z0-9!@#%_*+=.:-]+$", var.db_password))
-    error_message = "db_password must be at least 12 characters and use only letters, numbers, or ! @ # % _ * + = . : -"
+    condition     = length(var.db_password) >= 12 && can(regex("^[A-Za-z0-9!#%_*+=.:-]+$", var.db_password))
+    error_message = "db_password must be at least 12 characters and use only letters, numbers, or ! # % _ * + = . : -. Do not use spaces, /, @, or double quotes."
   }
 }
 
