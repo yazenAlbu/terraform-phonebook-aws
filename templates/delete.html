@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Delete Contact | Yazen Albu Phonebook</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2933;
+    }
+
+    .container {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      display: inline-block;
+      padding: 12px 16px;
+      border: 2px solid #1f2933;
+      border-radius: 8px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .warning-box {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid #f0a4a0;
+      border-radius: 8px;
+      background: #fff1f0;
+    }
+
+    .contact-details {
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid #d9e2ec;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .delete-button,
+    .cancel-link {
+      flex: 1;
+      min-width: 180px;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .delete-button {
+      border: none;
+      cursor: pointer;
+      background: #b42318;
+      color: white;
+    }
+
+    .delete-button:hover {
+      background: #8f1c13;
+    }
+
+    .cancel-link {
+      border: 1px solid #246bfd;
+      color: #246bfd;
+      text-decoration: none;
+      background: white;
+    }
+
+    .cancel-link:hover {
+      background: #eef4ff;
+    }
+
+    .message-error {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #ffe8e8;
+      color: #b42318;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #52606d;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="brand">
+      <span class="brand-mark">YA</span>
+
+      <h1>Delete Contact</h1>
+
+      <p>
+        {{ developer_name }} Phonebook Application
+      </p>
+    </header>
+
+    <section class="warning-box">
+      <h2>Are you sure?</h2>
+
+      <p>
+        This action will permanently remove the following contact
+        from the phonebook.
+      </p>
+    </section>
+
+    <section class="contact-details">
+      <p>
+        <strong>Name:</strong>
+        {{ person["name"] }}
+      </p>
+
+      <p>
+        <strong>Phone number:</strong>
+        {{ person["number"] }}
+      </p>
+    </section>
+
+    {% if error_message %}
+      <p class="message-error">
+        <strong>{{ error_message }}</strong>
+      </p>
+    {% endif %}
+
+    <div class="actions">
+      <form method="post">
+        <button
+          class="delete-button"
+          type="submit"
+        >
+          Confirm Delete
+        </button>
+      </form>
+
+      <a
+        class="cancel-link"
+        href="{{ url_for('home') }}"
+      >
+        Cancel
+      </a>
+    </div>
+
+    <footer>
+      Python Flask and MySQL project by {{ developer_name }}
+    </footer>
+
+  </main>
+</body>
+
+</html>
