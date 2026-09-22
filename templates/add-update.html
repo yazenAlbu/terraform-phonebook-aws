@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>{{ page_title }} | Yazen Albu Phonebook</title>
+
+  <style>
+    body {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2933;
+    }
+
+    .container {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      display: inline-block;
+      padding: 12px 16px;
+      border: 2px solid #1f2933;
+      border-radius: 8px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: 1px solid #cbd2d9;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      box-sizing: border-box;
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #246bfd;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .navigation {
+      margin-bottom: 24px;
+    }
+
+    .navigation a {
+      color: #246bfd;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .message-error {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      background: #ffe8e8;
+      color: #b42318;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #52606d;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <nav class="navigation">
+      <a href="{{ url_for('home') }}">
+        ← Back to search
+      </a>
+    </nav>
+
+    <header class="brand">
+      <span class="brand-mark">YA</span>
+      <h1>{{ page_title }}</h1>
+      <p>{{ developer_name }} Phonebook Application</p>
+    </header>
+
+    <form method="post">
+      <label for="name">Contact name</label>
+
+      <input
+        type="text"
+        id="name"
+        name="name"
+        maxlength="100"
+        placeholder="For example: Maria Klein"
+        value="{{ person['name'] }}"
+        required
+      >
+
+      <label for="number">Phone number</label>
+
+      <input
+        type="text"
+        id="number"
+        name="number"
+        maxlength="30"
+        placeholder="For example: +49 176 12345678"
+        value="{{ person['number'] }}"
+        required
+      >
+
+      <button type="submit">
+        {{ button_text }}
+      </button>
+    </form>
+
+    {% if error_message %}
+      <p class="message-error">
+        <strong>{{ error_message }}</strong>
+      </p>
+    {% endif %}
+
+    <footer>
+      Python Flask and MySQL project by {{ developer_name }}
+    </footer>
+  </main>
+</body>
+
+</html>
